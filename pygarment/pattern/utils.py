@@ -2,6 +2,12 @@
 
 import numpy as np
 
+
+def cross_2d(v1, v2):
+    """Signed scalar cross product for two 2D vectors (NumPy 2 compatible)."""
+    a, b = np.asarray(v1), np.asarray(v2)
+    return a[0] * b[1] - a[1] * b[0]
+
 def list_to_c(num):
     """Convert 2D list or list of 2D lists into complex number/list of complex numbers"""
     if isinstance(num[0], list) or isinstance(num[0], np.ndarray):
@@ -20,7 +26,7 @@ def vector_angle(v1, v2):
     cos = max(min(cos, 1), -1)  # NOTE: getting rid of numbers like 1.000002 that appear due to numerical instability
     angle = np.arccos(cos) 
     # Cross to indicate correct relative orienataion of v2 w.r.t. v1
-    cross = np.cross(v1, v2)
+    cross = cross_2d(v1, v2)
     
     if abs(cross) > 1e-5:
         angle *= np.sign(cross)
@@ -80,6 +86,6 @@ def abs_to_rel_2d(start, end, abs_point, as_vector=False):
     rel_point[1] = np.linalg.norm(vert_comp) / edge_len
 
     # Distinguish left&right curvature
-    rel_point[1] *= np.sign(np.cross(edge_vec, point_vec))
+    rel_point[1] *= np.sign(cross_2d(edge_vec, point_vec))
 
     return np.asarray(rel_point)

@@ -6,6 +6,12 @@ from scipy.spatial.transform import Rotation
 import svgpathtools as svgpath
 
 
+def cross_2d(v1, v2):
+    """Signed scalar cross product for two 2D vectors (NumPy 2 compatible)."""
+    a, b = np.asarray(v1), np.asarray(v2)
+    return a[0] * b[1] - a[1] * b[0]
+
+
 
 # proper inserstions by key with bicest module in python <3.10
 # https://stackoverflow.com/questions/27672494/how-to-use-bisect-insort-left-with-a-key
@@ -32,7 +38,7 @@ def vector_angle(v1, v2):
     cos = np.dot(v1, v2) / (norm(v1) * norm(v2))
     angle = np.arccos(cos) 
     # Cross to indicate correct relative orienataion of v2 w.r.t. v1
-    cross = np.cross(v1, v2)
+    cross = cross_2d(v1, v2)
     
     if abs(cross) > 1e-5:
         angle *= np.sign(cross)
